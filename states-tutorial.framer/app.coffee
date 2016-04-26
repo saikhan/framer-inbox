@@ -1,4 +1,5 @@
-# Import file "framer101_inbox"
+# Import files
+popOverlay = Framer.Importer.load("imported/framer101_inbox_1-4@1x")
 inbox = Framer.Importer.load("imported/framer101_inbox@1x")
 
 # on screen load
@@ -6,6 +7,10 @@ inbox.options.opacity = 0
 inbox.overlay.opacity = 0
 inbox.iconWrite.opacity = 0
 inbox.iconWrite.rotation = -90
+popOverlay.reminder.y = Framer.Device.screen.height
+popOverlay.reminder.bringToFront()
+popOverlay.keyboard.y = Framer.Device.screen.height
+popOverlay.keyboard.bringToFront()
 
 # constants
 initialFaceScale = 0.5
@@ -61,6 +66,17 @@ inbox.iconPlus.states.add
 		rotation: 90
 inbox.iconPlus.states.animationOptions = curve: "spring(500, 30, 0)"
 
+popOverlay.reminder.states.add
+	on:
+		y: Align.top
+popOverlay.reminder.states.animationOptions = curve: "spring(300, 30, 0)"
+
+popOverlay.keyboard.states.add
+	on:
+		y: Align.bottom
+popOverlay.keyboard.states.animationOptions = 
+	curve: "spring(300, 30, 0)"
+
 # on click events
 inbox.fab.onClick (event, layer) ->
 	inbox.overlay.states.switch("on")
@@ -81,3 +97,12 @@ inbox.overlay.onClick (event, layer) ->
 		face.states.switch("default")
 	for name in names
 		name.states.switch("default")
+
+inbox.face4.onClick (event, layer) ->
+	popOverlay.reminder.states.switch("on")
+	Utils.delay 0.25, ->
+		popOverlay.keyboard.states.switch("on")
+
+popOverlay.reminder.onClick (event, layer) ->
+	popOverlay.reminder.states.switch("default")
+	popOverlay.keyboard.states.switch("default")
